@@ -22,5 +22,15 @@ var path = require('path'),
        if ('development' === app.get('env')) {
         app.use(errorHandler());
        }
+       
+
+       app.engine('handlebars', exphbs.create({
+        defaultLayout: 'main',
+        layoutsDir: app.get('views') + '/layouts',
+        partialsDir: [app.get('views') + '/partials']
+       }).engine);
+       app.set('view engine', 'handlebars');
+
+       
         return app;
        };
