@@ -1,6 +1,6 @@
 var fs = require("fs"),
   path = require("path");
-
+var sidebar = require("../helpers/sidebar");
 module.exports = {
   index: function (req, res) {
     var viewModel = {
@@ -32,22 +32,22 @@ module.exports = {
         },
       ],
     };
-    res.render("image", viewModel);
+    sidebar(viewModel, function (viewModel) {
+      res.render("image", viewModel);
+    });
   },
-  create: function (req,res) {
-    
+  create: function (req, res) {
     var saveImage = function () {
       var possible = "abcdefghijklmnopqrstuvwxyz0123456789",
         imgUrl = "";
       for (var i = 0; i < 6; i += 1) {
         imgUrl += possible.charAt(Math.floor(Math.random() * possible.length));
       }
-      
-      var tempPath = req.file.path,
 
+      var tempPath = req.file.path,
         ext = path.extname(req.file.originalname).toLowerCase(),
         targetPath = path.resolve("./public/upload/" + imgUrl + ext);
-        
+
       if (
         ext === ".png" ||
         ext === ".jpg" ||
