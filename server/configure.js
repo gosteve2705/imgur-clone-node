@@ -9,13 +9,13 @@ var path = require('path'),
  errorHandler = require('errorhandler');
  moment = require('moment');
  multer = require('multer');
+ upload = multer({ dest: path.join(__dirname,'public/upload/temp')})
 
  module.exports = function(app) {
      app.use(morgan('dev'));
      app.use(bodyParser.urlencoded({'extended':true}));
      app.use(bodyParser.json());
-     app.use(multer({ dest: path.join(__dirname,
-        'public/upload/temp')}));
+     app.use(upload.single('file'));
      app.use(methodOverride());
      app.use(cookieParser('some-secret-value-here'));
      routes(app);
