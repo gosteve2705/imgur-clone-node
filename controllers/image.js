@@ -1,40 +1,54 @@
 var fs = require("fs"),
-  path = require("path");
-var sidebar = require("../helpers/sidebar");
+  path = require("path"),
+  sidebar = require("../helpers/sidebar"),
+  Models = require("../models");
 module.exports = {
   index: function (req, res) {
+    // declare our empty viewModel variable object:
     var viewModel = {
-      image: {
-        uniqueId: 1,
-        title: "Sample Image 1",
-        description: "This is a sample.",
-        filename: "sample1.jpg",
-        views: 10,
-        likes: 02,
-        timestamp: Date.now(),
-      },
-      comments: [
-        {
-          image_id: 1,
-          email: "test@testing.com",
-          name: "Test Tester",
-          gravatar: "http://lorempixel.com/75/75/animals/1",
-          comment: "This is a test comment...",
-          timestamp: Date.now(),
-        },
-        {
-          image_id: 1,
-          email: "test@testing.com",
-          name: "Test Tester",
-          gravatar: "http://lorempixel.com/75/75/animals/2",
-          comment: "Another followup comment!",
-          timestamp: Date.now(),
-        },
-      ],
+      image: {},
+      comments: [],
     };
-    sidebar(viewModel, function (viewModel) {
-      res.render("image", viewModel);
-    });
+    // find the image by searching the filename matching the url
+    parameter: Models.Image.findOne(
+      { filename: { $regex: req.params.image_id } },
+      function (err, image) {
+        if (err) {
+          throw err;
+        }
+        if (image) {
+          // if the image was found, increment its views counter
+          image.views = image.views + 1;
+          // save the image object to the viewModel:
+          viewModel.image = image;
+          // save the model (since it has been updated):
+          image.save();
+          // find any comments with the same image_id as the image:
+          Models.Comment.find(
+            { image_id: image._id },
+            {},
+            {
+              sort: {
+                timestamp: 1,
+              },
+            },
+            function (err, comments) {
+              if (err) { throw err; }
+              // save the comments collection to the viewModel:
+              viewModel.comments = comments;
+              // build the sidebar sending along the viewModel:
+              sidebar(viewModel, function (viewModel) {
+                // render the page view with its viewModel:
+                res.render("image", viewModel);
+              });
+            }
+          );
+        } else {
+          // if no image was found, simply go back to the homepage:
+          res.redirect("/");
+        }
+      }
+    );
   },
   create: function (req, res) {
     var saveImage = function () {
@@ -67,9 +81,9 @@ module.exports = {
     };
     saveImage();
   },
-  like: function(req, res) {
- res.json({likes: 1});
-},
+  like: function (req, res) {
+    res.json({ likes: 1 });
+  },
   comment: function (req, res) {
     res.send("The image:comment POST controller");
   },
