@@ -33,7 +33,9 @@ module.exports = {
               },
             },
             function (err, comments) {
-              if (err) { throw err; }
+              if (err) {
+                throw err;
+              }
               // save the comments collection to the viewModel:
               viewModel.comments = comments;
               // build the sidebar sending along the viewModel:
@@ -57,27 +59,52 @@ module.exports = {
       for (var i = 0; i < 6; i += 1) {
         imgUrl += possible.charAt(Math.floor(Math.random() * possible.length));
       }
-
-      var tempPath = req.file.path,
-        ext = path.extname(req.file.originalname).toLowerCase(),
-        targetPath = path.resolve("./public/upload/" + imgUrl + ext);
-
-      if (
-        ext === ".png" ||
-        ext === ".jpg" ||
-        ext === ".jpeg" ||
-        ext === ".gif"
-      ) {
-        fs.rename(tempPath, targetPath, function (err) {
-          if (err) throw err;
-          res.redirect("/images/" + imgUrl);
-        });
-      } else {
-        fs.unlink(tempPath, function () {
-          if (err) throw err;
-          res.json(500, { error: "Only image files are allowed." });
-        });
-      }
+      /* Start new code: */
+      // search for an image with the same filename by performing a find:
+      Models.Image.find({ filename: imgUrl }, function (err, images) {
+        if (images.length > 0) {
+          // if a matching image was found, try again (start over):
+          saveImage();
+        } else {
+          /* end new code:*/
+          var tempPath = req.files.file.path,
+            ext = path.extname(req.files.file.name).toLowerCase(),
+            targetPath = path.resolve("./public/upload/" + imgUrl + ext);
+          if (
+            ext === ".png" ||
+            ext === ".jpg" ||
+            ext === ".jpeg" ||
+            ext === ".gif"
+          ) {
+            fs.rename(tempPath, targetPath, function (err) {
+              if (err) {
+                throw err;
+              }
+              /* Start new code: */
+              // create a new Image model, populate its details:
+              var newImg = new Models.Image({
+                title: req.body.title,
+                filename: imgUrl + ext,
+                description: req.body.description,
+              });
+              // and save the new Image
+              newImg.save(function (err, image) {
+                res.redirect("/images/" + image.uniqueId);
+              });
+              /* End new code: */
+            });
+          } else {
+            fs.unlink(tempPath, function () {
+              if (err) {
+                throw err;
+              }
+              res.json(500, { error: "Only image files are allowed." });
+            });
+          }
+          /* Start new code: */
+        }
+      });
+      /* End new code: */
     };
     saveImage();
   },
