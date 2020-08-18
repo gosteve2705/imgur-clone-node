@@ -5,18 +5,18 @@
     <div class="panel-body">
         <p>{{ image.description }}</p>
         <div class="col-md-12 text-center">
-            <img src="/public/upload/{{image.imgUrl}}" class="img-thumbnail">
+            <img src="/public/upload/{{images.filename}}" class="img-thumbnail">
         </div>
     </div>
     <div class="panel-footer">
         <div class="row">
             <div class="col-md-8">
-                <button class="btn btn-success" id="btn-like" data-id="{{ image.uniqueId }}"><i class="fa fa-heart">
+                <button class="btn btn-success" id="btn-like" data-id="{{ images.uniqueId }}"><i class="fa fa-heart">
                         Like</i></button>
-                <strong class="likes-count">{{ image.likes }}
+                <strong class="likes-count">{{ images.likes }}
                 </strong> &nbsp; - &nbsp; <i class="fa fa-eye">
                 </i> <strong>{{ image.views }}</strong>
-                &nbsp; - &nbsp; Posted: <em class="text-muted">{{timeago image.timestamp }}</em>
+                &nbsp; - &nbsp; Posted: <em class="text-muted">{{timeago Image.timestamp }}</em>
             </div>
         </div>
     </div>
@@ -28,7 +28,7 @@
                 <strong class="panel-title">Comments</strong>
             </div>
             <div class="col-md-4 text-right">
-                <button class="btn btn-default btn-sm" id="btn-comment" data-id="{{ image.uniqueId }}">
+                <button class="btn btn-default btn-sm" id="btn-comment" data-id="{{ Image.uniqueId }}">
                     <i class="fa fa-comments-o"> Post
                         Comment...</i></button>
             </div>
@@ -37,7 +37,7 @@
     <div class="panel-body">
         <blockquote id="post-comment">
             <div class="row">
-                <form method="post" action="/images/{{image.uniqueId }}/comment">
+                <form method="post" action="/images/{{Image.uniqueId }}/comment">
                     <div class="form-group col-sm-12">
                         <label class="col-sm-2 control-label" for="name">Name:</label>
                         <div class="col-sm-10">

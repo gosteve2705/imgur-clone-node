@@ -30,6 +30,7 @@ var path = require('path'),
 
        app.engine('handlebars', exphbs.create({
         defaultLayout: 'main',
+        allowProtoMethodsByDefault: 'true',
         layoutsDir: app.get('views') + '/layouts',
         partialsDir: [app.get('views') + '/partials'],
         helpers: {
