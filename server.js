@@ -10,8 +10,6 @@ app = config(app);
 mongoose.connect('mongodb://localhost/imgPloadr',{
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
   });
 mongoose.connection.on('open', function() {
 console.log('Mongoose connected.');

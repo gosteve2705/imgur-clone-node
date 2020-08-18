@@ -67,8 +67,8 @@ module.exports = {
           saveImage();
         } else {
           /* end new code:*/
-          var tempPath = req.files.file.path,
-            ext = path.extname(req.files.file.name).toLowerCase(),
+          var tempPath = req.file.path,
+            ext = path.extname(req.file.originalname).toLowerCase(),
             targetPath = path.resolve("./public/upload/" + imgUrl + ext);
           if (
             ext === ".png" ||
