@@ -9,7 +9,9 @@ var path = require('path'),
  errorHandler = require('errorhandler');
  moment = require('moment');
  multer = require('multer');
- upload = multer({ dest: path.join(__dirname,'public/upload/temp')})
+ upload = multer({ dest: path.join(__dirname,'public/upload/temp')});
+ const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access');
+ const Handlebars = require('handlebars');
 
  module.exports = function(app) {
      app.use(morgan('dev'));
@@ -30,7 +32,10 @@ var path = require('path'),
 
        app.engine('handlebars', exphbs.create({
         defaultLayout: 'main',
-        allowProtoMethodsByDefault: 'true',
+        allowProtoMethodsByDefault: true,
+        handlebars : allowInsecurePrototypeAccess(Handlebars),
+        
+        
         layoutsDir: app.get('views') + '/layouts',
         partialsDir: [app.get('views') + '/partials'],
         helpers: {
@@ -44,3 +49,5 @@ var path = require('path'),
        
         return app;
        };
+       
+ 
