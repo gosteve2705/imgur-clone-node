@@ -34,7 +34,16 @@ var path = require('path'),
         defaultLayout: 'main',
         allowProtoMethodsByDefault: true,
         handlebars : allowInsecurePrototypeAccess(Handlebars),
-        
+        allowProtoPropertiesByDefault:true,
+        allowedProtoMethods: {
+            title : true,
+            description:true,
+            filename:true,
+            views:true,
+            likes:true,
+            timestamp:true,
+            uniqueId:true
+          },
         
         layoutsDir: app.get('views') + '/layouts',
         partialsDir: [app.get('views') + '/partials'],
