@@ -18,6 +18,14 @@
                 </i> <strong>{{ image.views }}</strong>
                 &nbsp; - &nbsp; Posted: <em class="text-muted">{{timeago image.timestamp }}</em>
             </div>
+            <div class="col-md-4 text-right">
+                <button class="btn btn-danger" id="btn-delete" data-id="{{
+image.uniqueId }}">
+                    <i class="fa fa-trash"> </i>
+                </button>
+            </div>
+
+
         </div>
     </div>
 </div>
@@ -70,11 +78,13 @@
             {{#each comments}}
             <li class="media">
                 <a class="pull-left" href="#">
-                    <img class="media-object img-circle" src="http://www.gravatar.com/avatar/{{gravatar}}?d=monsterid&s=45">
+                    <img class="media-object img-circle"
+                        src="http://www.gravatar.com/avatar/{{gravatar}}?d=monsterid&s=45">
                 </a>
                 <div class="media-body">
                     {{ comment }}
-                    <br /><strong class="media-heading">{{ name}}</strong> <small class="text-muted">{{timeago timestamp }}</small>
+                    <br /><strong class="media-heading">{{ name}}</strong> <small
+                        class="text-muted">{{timeago timestamp }}</small>
                 </div>
             </li>
             {{/each}}
