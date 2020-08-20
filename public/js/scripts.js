@@ -25,7 +25,7 @@ $(function () {
           $this.removeClass("btn-danger").addClass("btn-success");
           $this.find("i").removeClass("fa-trash").addClass("fa-check");
           $this.append("<span> Deleted!</span>");
-          
+          location.reload()
         }
         
       });
