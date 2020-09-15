@@ -52,3 +52,18 @@ describe("Server", function () {
     });
   });
 });
+describe('Port', function(){
+  it('should be set', function() {
+  server();
+  expect(app.set.firstCall.args[0]).to.equal('port');
+  });
+  it('should default to 3300', function() {
+  server();
+  expect(app.set.firstCall.args[1]).to.equal(3300);
+  });
+  it('should be configurable', function() {
+  process.env.PORT = '5500';
+  server();
+  expect(app.set.firstCall.args[1]).to.equal('5500');
+  });
+ });
